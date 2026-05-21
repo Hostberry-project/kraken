@@ -7,7 +7,7 @@ module.exports = {
   addonDescription:
     'Kraken: Peerflix, Torrentio, TorrentClaw e indexadores ES. Filtra español, ordena calidad y debrid.',
 
-  /** Orden de consulta y prioridad en lista: Peerflix → Torrentio → TorrentClaw */
+  /** Orden upstream en lista (tras indexadores web): Peerflix → Torrentio → TorrentClaw */
   upstreamOrder: ['peerflix', 'torrentio', 'torrentclaw'],
 
   /** Addons Stremio externos (proxy de streams) */
@@ -59,8 +59,13 @@ module.exports = {
   /** Caché en memoria (ms) — Cinemeta y upstream */
   cacheTtlMs: 15 * 60 * 1000,
 
-  /** Stremio suele cancelar antes de 25s — no superar mucho este valor */
-  streamRequestTimeoutMs: 22000,
+  /** Stremio suele cancelar ~25–30s; reservar tiempo para indexadores + debrid */
+  streamRequestTimeoutMs: 28000,
+  /** Tiempo máximo esperando magnets en AllDebrid/Real-Debrid */
+  debridMagnetWaitMs: 14000,
+  /** Scrapers en paralelo (lotes) */
+  scrapeConcurrency: 8,
+  scrapeTimeoutMs: 12000,
 
   /**
    * Si hay N enlaces directos de upstream, omitir scraping local.
@@ -254,8 +259,9 @@ module.exports = {
   ],
 
   maxDetailPagesPerSite: 2,
-  maxMagnetsToDebrid: 4,
-  maxP2PStreams: 6,
+  maxMagnetsToDebrid: 8,
+  maxIndexerDebridAttempts: 6,
+  maxP2PStreams: 10,
   requestTimeoutMs: 20000,
 
   userAgent:
