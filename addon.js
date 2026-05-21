@@ -76,8 +76,10 @@ const builder = new addonBuilder({
       key: 'enabledSites',
       type: 'text',
       title: 'Indexadores activos (interno)',
-      default:
-        'DivxTotal,GranTorrent,MejorTorrent,DonTorrent,EliteTorrent,NewPCT,ZonaTorrent,TorrentLocura,PedroTorrent',
+      default: config.torrentSites
+        .filter((s) => s.enabled)
+        .map((s) => s.name)
+        .join(','),
     },
     {
       key: 'proxyUrl',
