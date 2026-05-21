@@ -31,7 +31,7 @@ module.exports = {
       buildConfig(services) {
         const parts = [
           'language=spanish',
-          'providers=mejortorrent,wolfmax4k,cinecalidad,bludv,micolachaodublado,comando,torrentgalaxy,1337x,rarbg,eztv,yts',
+          'providers=mejortorrent,dontorrent,grantorrent,wolfmax4k,cinecalidad,bludv,micolachaodublado,comando,torrenflix,mejorenlatino,elitetorrent,newpct,zonatorrent,torrentgalaxy,1337x,rarbg,eztv,yts',
           'limit=12',
         ]
         if (services.realDebrid) parts.push(`realdebrid=${services.realDebrid}`)
@@ -64,8 +64,11 @@ module.exports = {
   /** Tiempo máximo esperando magnets en AllDebrid/Real-Debrid */
   debridMagnetWaitMs: 14000,
   /** Scrapers en paralelo (lotes) */
-  scrapeConcurrency: 8,
+  scrapeConcurrency: process.env.FLY_APP_NAME ? 4 : 8,
   scrapeTimeoutMs: 12000,
+  /** Si el HTML directo falla (Fly bloqueado), intentar r.jina.ai */
+  scraperJinaFallback: process.env.SCRAPER_JINA_FALLBACK === 'true',
+  scraperJinaBase: 'https://r.jina.ai/',
 
   /**
    * Si hay N enlaces directos de upstream, omitir scraping local.
