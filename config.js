@@ -258,7 +258,7 @@ module.exports = {
     },
   ],
 
-  maxDetailPagesPerSite: 2,
+  maxDetailPagesPerSite: 3,
   maxMagnetsToDebrid: 8,
   maxIndexerDebridAttempts: 6,
   maxP2PStreams: 10,
