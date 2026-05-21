@@ -10,8 +10,8 @@ COPY lib ./lib
 COPY public ./public
 
 ENV NODE_ENV=production
-ENV PORT=7000
+ENV PORT=8080
 
-EXPOSE 7000
+EXPOSE 8080
 
 CMD ["node", "addon.js"]
