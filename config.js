@@ -62,8 +62,11 @@ module.exports = {
   /** Stremio suele cancelar antes de 25s — no superar mucho este valor */
   streamRequestTimeoutMs: 22000,
 
-  /** Si hay N enlaces directos de upstream, omitir scraping local */
-  fastPathMinDirectStreams: 6,
+  /**
+   * Si hay N enlaces directos de upstream, omitir scraping local.
+   * 0 = nunca omitir (siempre buscar en indexadores web).
+   */
+  fastPathMinDirectStreams: 0,
 
   /** Excluir calidades basura de la lista final */
   excludeQualities: [/\bcam\b/i, /telesync/i, /\bts\b/i, /hdts/i, /scr\b/i],

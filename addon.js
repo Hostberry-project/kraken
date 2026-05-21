@@ -73,6 +73,12 @@ const builder = new addonBuilder({
       default: 'checked',
     },
     {
+      key: 'enableIndexadores',
+      type: 'checkbox',
+      title: 'Indexadores web ES (DivxTotal, MejorTorrent, DonTorrent, etc.)',
+      default: 'checked',
+    },
+    {
       key: 'proxyUrl',
       type: 'text',
       title: 'Proxy SOCKS5/HTTP (opcional, ej. socks5://127.0.0.1:8080)',

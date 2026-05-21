@@ -78,6 +78,12 @@ Dockerfile
 - Node.js **18+**
 - Stremio **escritorio**
 
+## Indexadores web
+
+En `/configure` activa **Indexadores web ES**. Para reproducir enlaces de esas webs hace falta **Real-Debrid o AllDebrid** (los streams salen como `Debrid · DivxTotal · …` o `P2P · …`).
+
+En **Fly.io** los sitios a veces bloquean la IP del servidor; si ves `0 resultados` en logs, usa un **proxy** en `/configure` o ejecuta Kraken en local.
+
 ## Seguridad
 
 - API de debrid solo en `/configure`, nunca en el repositorio.
