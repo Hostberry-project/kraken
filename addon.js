@@ -190,9 +190,5 @@ console.log('')
 console.log('  Manifest (Stremio):')
 for (const u of manifestUrls) console.log('   ', u)
 console.log('  Configurar:        ', primary.replace('/manifest.json', '/configure'))
-if (process.platform === 'linux') {
-  console.log('  Scripts:            ./scripts/start.sh | ./scripts/stop.sh')
-  console.log('  Guia:               docs/LINUX.md')
-}
 if (process.env.FLY_APP_NAME) console.log('  Fly.io:             fly logs | fly apps open')
 console.log('')
