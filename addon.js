@@ -73,10 +73,11 @@ const builder = new addonBuilder({
       default: 'checked',
     },
     {
-      key: 'enableIndexadores',
-      type: 'checkbox',
-      title: 'Indexadores web ES (DivxTotal, MejorTorrent, DonTorrent, etc.)',
-      default: 'checked',
+      key: 'enabledSites',
+      type: 'text',
+      title: 'Indexadores activos (interno)',
+      default:
+        'DivxTotal,GranTorrent,MejorTorrent,DonTorrent,EliteTorrent,NewPCT,ZonaTorrent,TorrentLocura,PedroTorrent',
     },
     {
       key: 'proxyUrl',

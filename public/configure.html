@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kraken — Configurar</title>
+  <style>
+    :root {
+      --bg: #0a1628;
+      --card: #132238;
+      --accent: #00b4d8;
+      --accent-dim: #1e4a5f;
+      --text: #e7ecf3;
+      --muted: #8b9cb3;
+      --on: #0d7a4a;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 1.25rem;
+      line-height: 1.45;
+      max-width: 720px;
+      margin-inline: auto;
+    }
+    h1 { font-size: 1.5rem; margin: 0 0 0.25rem; }
+    .sub { color: var(--muted); font-size: 0.9rem; margin-bottom: 1.25rem; }
+    .card {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 1rem 1.15rem;
+      margin-bottom: 1rem;
+    }
+    .card h2 {
+      font-size: 1rem;
+      margin: 0 0 0.75rem;
+      color: var(--accent);
+    }
+    .row-actions {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.75rem;
+    }
+    .btn-mini {
+      background: var(--accent-dim);
+      color: var(--text);
+      border: 1px solid #2a5070;
+      border-radius: 8px;
+      padding: 0.35rem 0.75rem;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+    .btn-mini:hover { border-color: var(--accent); }
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .chip {
+      border: 1px solid #2a5070;
+      background: #0f1e32;
+      color: var(--muted);
+      border-radius: 999px;
+      padding: 0.45rem 0.9rem;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: 0.15s;
+      user-select: none;
+    }
+    .chip.active {
+      background: var(--on);
+      border-color: #12c070;
+      color: #fff;
+    }
+    .chip.addon.active {
+      background: #155a7a;
+      border-color: var(--accent);
+    }
+    label.field {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 0.35rem;
+    }
+    input[type="text"], input[type="password"] {
+      width: 100%;
+      padding: 0.55rem 0.65rem;
+      border-radius: 8px;
+      border: 1px solid #2a5070;
+      background: #0f1e32;
+      color: var(--text);
+      font-size: 0.95rem;
+      margin-bottom: 0.75rem;
+    }
+    .check-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .check-row input { width: auto; margin: 0; }
+    .install {
+      display: block;
+      width: 100%;
+      margin-top: 0.5rem;
+      padding: 0.85rem;
+      font-size: 1rem;
+      font-weight: 600;
+      background: var(--accent);
+      color: #041018;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+    }
+    .install:hover { filter: brightness(1.08); }
+    .hint { font-size: 0.8rem; color: var(--muted); margin-top: 0.5rem; }
+    #status { font-size: 0.85rem; color: var(--accent); min-height: 1.2em; }
+  </style>
+</head>
+<body>
+  <h1>Kraken</h1>
+  <p class="sub">Elige complementos e indexadores. Luego pulsa Instalar en Stremio.</p>
+
+  <form id="mainForm">
+    <div class="card">
+      <h2>Complementos (upstream)</h2>
+      <div class="row-actions">
+        <button type="button" class="btn-mini" data-action="addons-all">Todos</button>
+        <button type="button" class="btn-mini" data-action="addons-none">Ninguno</button>
+      </div>
+      <div class="chips" id="addons"></div>
+    </div>
+
+    <div class="card">
+      <h2>Indexadores web (España)</h2>
+      <div class="row-actions">
+        <button type="button" class="btn-mini" data-action="sites-all">Todos</button>
+        <button type="button" class="btn-mini" data-action="sites-none">Ninguno</button>
+      </div>
+      <div class="chips" id="sites"></div>
+      <p class="hint">Requieren Real-Debrid para reproducir en la mayoría de casos.</p>
+    </div>
+
+    <div class="card">
+      <h2>Debrid y red</h2>
+      <label class="field" for="debridApiKey">Real-Debrid API</label>
+      <input type="password" id="debridApiKey" name="debridApiKey" autocomplete="off" />
+
+      <label class="field" for="alldebridApiKey">AllDebrid API (opcional)</label>
+      <input type="password" id="alldebridApiKey" name="alldebridApiKey" autocomplete="off" />
+
+      <label class="field" for="proxyUrl">Proxy SOCKS5/HTTP (opcional)</label>
+      <input type="text" id="proxyUrl" name="proxyUrl" placeholder="socks5://127.0.0.1:1080" />
+
+      <div class="check-row">
+        <input type="checkbox" id="soloEspanol" name="soloEspanol" checked />
+        <label for="soloEspanol">Solo español / castellano / latino</label>
+      </div>
+    </div>
+
+    <input type="hidden" id="enabledSites" name="enabledSites" />
+    <input type="hidden" id="enablePeerflix" name="enablePeerflix" />
+    <input type="hidden" id="enableTorrentio" name="enableTorrentio" />
+    <input type="hidden" id="enableTorrentClaw" name="enableTorrentClaw" />
+
+    <p id="status"></p>
+    <a class="install" id="installLink" href="#">Instalar en Stremio</a>
+  </form>
+
+  <script>
+    const ADDON_KEYS = {
+      peerflix: 'enablePeerflix',
+      torrentio: 'enableTorrentio',
+      torrentclaw: 'enableTorrentClaw',
+    }
+
+    let options = { addons: [], sites: [], defaultEnabledSites: '' }
+
+    function parseConfigFromUrl() {
+      try {
+        const path = decodeURIComponent(window.location.pathname || '')
+        const m = path.match(/\/([^/]+)\/manifest\.json/i)
+        if (m) return JSON.parse(m[1])
+      } catch (_) {}
+      return {}
+    }
+
+    function chip(label, group, id, active) {
+      const el = document.createElement('button')
+      el.type = 'button'
+      el.className = 'chip' + (group === 'addon' ? ' addon' : '') + (active ? ' active' : '')
+      el.textContent = label
+      el.dataset.group = group
+      el.dataset.id = id
+      el.addEventListener('click', () => {
+        el.classList.toggle('active')
+        syncHidden()
+        updateInstallLink()
+      })
+      return el
+    }
+
+    function setGroupActive(group, on) {
+      document.querySelectorAll('.chip[data-group="' + group + '"]').forEach((el) => {
+        el.classList.toggle('active', on)
+      })
+    }
+
+    function syncHidden() {
+      const sites = []
+      document.querySelectorAll('.chip[data-group="site"].active').forEach((el) => {
+        sites.push(el.dataset.id)
+      })
+      document.getElementById('enabledSites').value = sites.join(',')
+
+      for (const [id, key] of Object.entries(ADDON_KEYS)) {
+        const el = document.getElementById(key)
+        const on = document.querySelector('.chip[data-group="addon"][data-id="' + id + '"]')?.classList.contains('active')
+        el.value = on ? 'checked' : 'false'
+      }
+
+      const solo = document.getElementById('soloEspanol')
+      if (!solo.checked) solo.value = 'false'
+    }
+
+    function buildConfig() {
+      syncHidden()
+      const cfg = {
+        debridApiKey: document.getElementById('debridApiKey').value.trim(),
+        alldebridApiKey: document.getElementById('alldebridApiKey').value.trim(),
+        proxyUrl: document.getElementById('proxyUrl').value.trim(),
+        soloEspanol: document.getElementById('soloEspanol').checked ? 'checked' : 'false',
+        enabledSites: document.getElementById('enabledSites').value,
+        enablePeerflix: document.getElementById('enablePeerflix').value,
+        enableTorrentio: document.getElementById('enableTorrentio').value,
+        enableTorrentClaw: document.getElementById('enableTorrentClaw').value,
+      }
+      return cfg
+    }
+
+    function updateInstallLink() {
+      const cfg = buildConfig()
+      const host = window.location.host
+      const href = 'stremio://' + host + '/' + encodeURIComponent(JSON.stringify(cfg)) + '/manifest.json'
+      document.getElementById('installLink').href = href
+      const nAddon = document.querySelectorAll('.chip[data-group="addon"].active').length
+      const nSite = document.querySelectorAll('.chip[data-group="site"].active').length
+      document.getElementById('status').textContent =
+        nAddon + ' complemento(s), ' + nSite + ' indexador(es) seleccionados'
+    }
+
+    function applyConfig(cfg) {
+      if (cfg.debridApiKey) document.getElementById('debridApiKey').value = cfg.debridApiKey
+      if (cfg.alldebridApiKey) document.getElementById('alldebridApiKey').value = cfg.alldebridApiKey
+      if (cfg.proxyUrl) document.getElementById('proxyUrl').value = cfg.proxyUrl
+      document.getElementById('soloEspanol').checked = cfg.soloEspanol !== 'false'
+
+      const siteSet = new Set(
+        (cfg.enabledSites || options.defaultEnabledSites || '')
+          .split(',')
+          .map((s) => s.trim())
+          .filter(Boolean)
+      )
+      document.querySelectorAll('.chip[data-group="site"]').forEach((el) => {
+        el.classList.toggle('active', siteSet.has(el.dataset.id))
+      })
+
+      document.querySelectorAll('.chip[data-group="addon"]').forEach((el) => {
+        const key = ADDON_KEYS[el.dataset.id]
+        const on = cfg[key] !== 'false' && cfg[key] !== false
+        el.classList.toggle('active', on)
+      })
+      syncHidden()
+      updateInstallLink()
+    }
+
+    async function init() {
+      const res = await fetch('/api/configure-options.json')
+      options = await res.json()
+
+      const addonsEl = document.getElementById('addons')
+      options.addons.forEach((a) => {
+        addonsEl.appendChild(chip(a.name, 'addon', a.id, a.defaultOn))
+      })
+
+      const sitesEl = document.getElementById('sites')
+      options.sites.forEach((s) => {
+        sitesEl.appendChild(chip(s.name, 'site', s.name, s.defaultOn))
+      })
+
+      document.querySelector('[data-action="addons-all"]').onclick = () => {
+        setGroupActive('addon', true)
+        syncHidden()
+        updateInstallLink()
+      }
+      document.querySelector('[data-action="addons-none"]').onclick = () => {
+        setGroupActive('addon', false)
+        syncHidden()
+        updateInstallLink()
+      }
+      document.querySelector('[data-action="sites-all"]').onclick = () => {
+        setGroupActive('site', true)
+        syncHidden()
+        updateInstallLink()
+      }
+      document.querySelector('[data-action="sites-none"]').onclick = () => {
+        setGroupActive('site', false)
+        syncHidden()
+        updateInstallLink()
+      }
+
+      document.getElementById('mainForm').addEventListener('change', updateInstallLink)
+      document.getElementById('mainForm').addEventListener('input', updateInstallLink)
+
+      document.getElementById('installLink').addEventListener('click', (e) => {
+        const nAddon = document.querySelectorAll('.chip[data-group="addon"].active').length
+        const nSite = document.querySelectorAll('.chip[data-group="site"].active').length
+        if (!nAddon && !nSite) {
+          e.preventDefault()
+          alert('Activa al menos un complemento o un indexador web.')
+        }
+      })
+
+      applyConfig(parseConfigFromUrl())
+      if (!document.querySelector('.chip[data-group="site"].active')) {
+        setGroupActive('site', true)
+        syncHidden()
+        updateInstallLink()
+      }
+    }
+
+    init().catch((err) => {
+      document.getElementById('status').textContent = 'Error cargando opciones: ' + err.message
+    })
+  </script>
+</body>
+</html>
