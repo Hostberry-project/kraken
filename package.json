@@ -1,0 +1,30 @@
+{
+  "name": "kraken-stremio",
+  "version": "4.0.0",
+  "description": "Kraken — Stremio addon: Spanish torrent sources + upstream + debrid",
+  "main": "addon.js",
+  "scripts": {
+    "start": "node addon.js",
+    "test": "node scripts/test-stream.js",
+    "test:series": "node scripts/test-stream.js series tt0944947:1:1"
+  },
+  "keywords": [
+    "stremio",
+    "addon",
+    "kraken",
+    "spanish",
+    "debrid"
+  ],
+  "license": "GPL-3.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TU-USUARIO/kraken-stremio.git"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "stremio-addon-sdk": "^1.6.10",
+    "undici": "^6.21.0"
+  }
+}

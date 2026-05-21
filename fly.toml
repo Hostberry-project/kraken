@@ -1,0 +1,30 @@
+# Cambia "app" por un nombre único antes del primer deploy (fly launch).
+# Docs: docs/FLY.md
+app = 'kraken-stremio'
+primary_region = 'mad'
+
+[build]
+  dockerfile = 'Dockerfile'
+
+[env]
+  NODE_ENV = 'production'
+
+[http_service]
+  internal_port = 7000
+  force_https = true
+  auto_stop_machines = 'stop'
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+
+  [[http_service.checks]]
+    grace_period = '15s'
+    interval = '30s'
+    method = 'GET'
+    path = '/health.json'
+    timeout = '5s'
+
+[[vm]]
+  memory = '512mb'
+  cpu_kind = 'shared'
+  cpus = 1
