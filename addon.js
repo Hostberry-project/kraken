@@ -96,7 +96,7 @@ const builder = new addonBuilder({
     {
       key: 'enablePalantir',
       type: 'checkbox',
-      title: 'Incluir Palantir (catálogo moria en el servidor)',
+      title: 'Incluir Palantir (catálogo moria online en Fly)',
       default: 'checked',
     },
     {

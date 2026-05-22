@@ -1,96 +1,60 @@
-# Kraken — complemento Stremio
+# Kraken — complemento Stremio (100 % online)
 
-Agregador en español: **Peerflix**, **Torrentio**, **TorrentClaw**, indexadores ES, **Palantir** (catálogo moria) y debrid (Real-Debrid / AllDebrid).
+Agregador en español en la nube: **Peerflix**, **Torrentio**, **TorrentClaw**, indexadores ES, **Palantir** (catálogo moria) y debrid. **No hace falta instalar nada en tu PC** salvo Stremio.
 
 ## Instalar en Stremio
 
-**Ajustes → Complementos → URL del complemento:**
+**Ajustes → Complementos → Pegar URL:**
 
-| Entorno | URL |
-|---------|-----|
-| **Fly.io** | `https://TU-APP.fly.dev/manifest.json` |
-| **Local** | `http://127.0.0.1:7000/manifest.json` |
+```
+https://kraken-anqfxw.fly.dev/manifest.json
+```
 
-Configuración: misma URL con `/configure` en lugar de `manifest.json`.
+**Configurar** (misma URL, cambia `manifest.json` por `configure`):
 
-## Uso local
+```
+https://kraken-anqfxw.fly.dev/configure
+```
+
+Activa **Incluir Palantir**, **Peerflix/Torrentio** si quieres, y tu **AllDebrid** o **Real-Debrid** (necesario para enlaces 1fichier de Palantir).
+
+## Cómo funciona moria (todo en el servidor)
+
+| Paso | Dónde |
+|------|--------|
+| Catálogo y enlaces | SQLite **moria** en Fly (`/data/moria.db`) |
+| Copia del `.zm3` | Incluido en la imagen Docker + [GitHub](https://github.com/Hostberry-project/kraken/raw/refs/heads/main/moria_3_3_9.zm3) |
+| Tu búsqueda en Stremio | Kraken en Fly consulta la BD local del servidor, **no tu PC** |
+
+Al arrancar Fly: usa `moria.db` del volumen, o extrae desde `/app/moria_3_3_9.zm3`, o descarga desde GitHub.
+
+Comprueba estado:
 
 ```bash
-npm install
-npm start
+curl -s https://kraken-anqfxw.fly.dev/health.json
 ```
 
-Copia `.env.example` a `.env` (no lo subas a Git).
+(`moria.ready: true` y `sizeMb` ~160 cuando está listo.)
+
+## Actualizar moria en la nube
+
+1. Sube un `moria_3_3_9.zm3` nuevo al repo [Hostberry-project/kraken](https://github.com/Hostberry-project/kraken).
+2. `git push` → GitHub Actions despliega en Fly.
+3. Opcional: borra el volumen viejo en Fly para forzar re-extracción (`fly ssh console -a kraken-anqfxw` → `rm /data/moria.db`).
+
+## Desarrollo / despliegue (mantenedores)
+
+Repo: https://github.com/Hostberry-project/kraken
+
+Secret en GitHub: `FLY_API_TOKEN` → despliegue automático en cada push a `main`.
 
 ```bash
-npm test
-npm run test:palantir
-npm run test:palantir:catalog
+fly deploy -a kraken-anqfxw
 ```
-
-## Palantir (moria)
-
-Kraken lee la SQLite **moria** del addon Kodi Palantir 3 (películas, series, enlaces cifrados). En el servidor define `PALANTIR_MORIA_DB` o sube la BD a Fly.
-
-**Extraer desde Kodi:**
-
-```bash
-node scripts/moria-extract.js "C:\ruta\moria.cm3" "C:\ruta\moria.db"
-```
-
-En `.env`: `PALANTIR_MORIA_DB=C:\ruta\moria.db`. Ruta típica en Windows: `%APPDATA%\Kodi\userdata\addon_data\script.module\settings.xml` o `moria.cm3` del addon.
-
-**Fly.io:**
-
-```powershell
-fly volumes create moria_data --region mad --size 2
-fly deploy
-.\scripts\upload-moria-fly.ps1 -Source "C:\ruta\moria.cm3"
-```
-
-Sin subida manual, al arrancar descarga el `.zm3` desde el repo ([URL directa](https://github.com/Hostberry-project/kraken/raw/refs/heads/main/moria_3_3_9.zm3)); suele ir detrás del `moria.cm3` de tu Kodi.
-
-En Stremio: activa **Incluir Palantir** y **AllDebrid** (enlaces 1fichier).
-
-## GitHub (sincronizar repo)
-
-```bash
-cd c:\Users\pc\Desktop\stremio
-gh auth login
-git push origin main
-```
-
-Repo: [Hostberry-project/kraken](https://github.com/Hostberry-project/kraken)
-
-**Sincronización con Fly:** en el repo de GitHub → *Settings → Secrets → Actions* → `FLY_API_TOKEN` (`fly tokens create deploy`). Cada `push` a `main` despliega con `.github/workflows/fly-deploy.yml`.
-
-El archivo `moria_3_3_9.zm3` (~53 MB) va en el repo; Fly lo usa desde la imagen (`PALANTIR_MORIA_ZM3=/app/moria_3_3_9.zm3`).
-
-## Fly.io
-
-```bash
-fly auth login
-fly launch
-fly deploy
-```
-
-Comprueba: `curl https://TU-APP.fly.dev/health.json`
-
-## Estructura
-
-```
-addon.js  config.js  fly.toml  Dockerfile
-lib/      public/    scripts/
-```
-
-## Requisitos
-
-- Node.js **18+**
-- Stremio **escritorio**
 
 ## Seguridad
 
-Las API keys de debrid solo en `/configure`, nunca en el repositorio.
+Las API keys de debrid solo en `/configure` de Stremio, nunca en el repositorio.
 
 ## Licencia
 

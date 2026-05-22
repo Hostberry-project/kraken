@@ -8,11 +8,7 @@ function defaultMoriaDb() {
 }
 
 function defaultMoriaZm3() {
-  if (process.env.PALANTIR_MORIA_ZM3) return process.env.PALANTIR_MORIA_ZM3
-  const path = require('path')
-  const fs = require('fs')
-  const bundled = path.join(__dirname, 'moria_3_3_9.zm3')
-  return fs.existsSync(bundled) ? bundled : ''
+  return process.env.PALANTIR_MORIA_ZM3 || ''
 }
 
 module.exports = {

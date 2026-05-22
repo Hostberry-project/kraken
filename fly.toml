@@ -8,8 +8,10 @@ primary_region = 'mad'
 [env]
   NODE_ENV = 'production'
   PORT = '8080'
+  PUBLIC_URL = 'https://kraken-anqfxw.fly.dev'
   PALANTIR_MORIA_DB = '/data/moria.db'
   PALANTIR_MORIA_ZM3 = '/app/moria_3_3_9.zm3'
+  PALANTIR_MORIA_ZM3_URL = 'https://github.com/Hostberry-project/kraken/raw/refs/heads/main/moria_3_3_9.zm3'
 
 [mounts]
   source = 'moria_data'
@@ -24,7 +26,7 @@ primary_region = 'mad'
   processes = ['app']
 
   [[http_service.checks]]
-    grace_period = '45s'
+    grace_period = '120s'
     interval = '30s'
     method = 'GET'
     path = '/health.json'
