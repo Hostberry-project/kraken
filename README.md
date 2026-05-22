@@ -48,7 +48,7 @@ fly deploy
 .\scripts\upload-moria-fly.ps1 -Source "C:\ruta\moria.cm3"
 ```
 
-Sin subida manual, al arrancar puede descargarse el `.zm3` público (`PALANTIR_MORIA_ZM3_URL`); suele ir detrás del `moria.cm3` de tu Kodi.
+Sin subida manual, al arrancar descarga el `.zm3` desde el repo ([URL directa](https://github.com/Hostberry-project/kraken/raw/refs/heads/main/moria_3_3_9.zm3)); suele ir detrás del `moria.cm3` de tu Kodi.
 
 En Stremio: activa **Incluir Palantir** y **AllDebrid** (enlaces 1fichier).
 
