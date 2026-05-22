@@ -212,20 +212,11 @@ if (!fs.existsSync(publicDir)) {
 
 async function boot() {
   try {
-    const { ensureMoriaDbOnce } = require('./lib/palantir/moriaEnsure')
-    let r = await ensureMoriaDbOnce()
-    if (!r.ok && process.env.FLY_APP_NAME) {
-      console.warn('[moria] Reintento en 5s...')
-      await new Promise((resolve) => setTimeout(resolve, 5000))
-      r = await ensureMoriaDbOnce()
-    }
-    if (r.ok) {
-      console.log(`[moria] listo (${r.source}): ${r.dbPath}`)
-    } else if (process.env.FLY_APP_NAME) {
-      console.warn('[moria]', r.message)
-    }
+    const { scheduleMoriaPrepare } = require('./lib/palantir/moriaEnsure')
+    scheduleMoriaPrepare()
+    console.log('[moria] Preparación en segundo plano (no bloquea el servidor)')
   } catch (e) {
-    console.warn('[moria] ensureMoriaDb:', e.message)
+    console.warn('[moria] schedule:', e.message)
   }
 
   return startKrakenServer(builder.getInterface(), {
