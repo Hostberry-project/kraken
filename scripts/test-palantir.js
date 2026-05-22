@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 /**
- * Prueba Palantir vía moria (SQLite) o API HTTP.
+ * Prueba base de datos moria (SQLite).
  * Uso:
- *   npm run test:palantir
+ *   npm run test:moria
  *   npm run test:palantir -- 1330021
  *   ALLDEBRID_API_KEY=xxx npm run test:palantir -- 1330021
  */
@@ -41,7 +41,7 @@ async function main() {
   const cfg = getPalantirConfig({})
 
   if (!isPalantirConfigured({})) {
-    console.error('Palantir no configurado.')
+    console.error('Base de datos no configurada.')
     console.error('  moria:', isMoriaConfigured({}) ? 'ok' : 'falta PALANTIR_MORIA_DB o zm3')
     console.error('  api:', cfg.apiBase && cfg.linksPath ? 'ok' : 'falta API')
     console.error('Define PALANTIR_MORIA_DB o PALANTIR_API_BASE — ver README')

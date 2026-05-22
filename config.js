@@ -62,7 +62,7 @@ module.exports = {
     },
   ],
 
-  /** Palantir 3 — moria SQLite (ver README). API HTTP solo vía env. */
+  /** Base de datos moria (SQLite). API HTTP solo vía env. */
   palantir: {
     enabled: true,
     moriaDb: process.env.PALANTIR_MORIA_DB || defaultMoriaDb(),

@@ -27,6 +27,10 @@ const {
 } = require('./lib/palantir/catalog')
 const { isPalantirConfigured } = require('./lib/palantir/config')
 
+function isBaseDatosDisabled(cfg = {}) {
+  return cfg.enableBaseDatos === 'false' || cfg.enablePalantir === 'false'
+}
+
 const builder = new addonBuilder({
   id: 'org.stremio.kraken',
   version: '4.0.0',
@@ -36,15 +40,15 @@ const builder = new addonBuilder({
   catalogs: [
     {
       type: 'movie',
-      id: 'palantir-pelis',
-      name: 'Palantir',
+      id: 'bd-pelis',
+      name: 'Base de datos',
       extraSupported: ['search', 'skip'],
       extraRequired: [],
     },
     {
       type: 'series',
-      id: 'palantir-series',
-      name: 'Palantir',
+      id: 'bd-series',
+      name: 'Base de datos',
       extraSupported: ['search', 'skip'],
       extraRequired: [],
     },
@@ -94,9 +98,9 @@ const builder = new addonBuilder({
       default: 'checked',
     },
     {
-      key: 'enablePalantir',
+      key: 'enableBaseDatos',
       type: 'checkbox',
-      title: 'Incluir Palantir (catálogo moria online en Fly)',
+      title: 'Incluir base de datos (catálogo moria online)',
       default: 'checked',
     },
     {
@@ -124,7 +128,7 @@ builder.defineCatalogHandler(async function (args) {
 
 builder.defineMetaHandler(async function (args) {
   const { type, id, config: userConfig = {} } = args
-  if (userConfig.enablePalantir === 'false') return { meta: null }
+  if (isBaseDatosDisabled(userConfig)) return { meta: null }
   if (!/^tmdb:\d+/i.test(String(id))) return { meta: null }
   const tmdbId = Number(String(id).split(':')[1])
   const meta = getMoriaMeta(type, tmdbId, userConfig)
@@ -145,14 +149,14 @@ builder.defineStreamHandler(async function (args) {
   const cfg = userConfig || {}
   const userOpts = parseUserConfig(cfg)
   const services = getDebridServices(cfg)
-  const palantirOk = isPalantirConfigured(cfg) && userOpts.enablePalantir
+  const baseDatosOk = isPalantirConfigured(cfg) && userOpts.enableBaseDatos
 
-  if (!hasAnyDebrid(services) && !hasEnabledUpstream(userOpts) && !palantirOk) {
+  if (!hasAnyDebrid(services) && !hasEnabledUpstream(userOpts) && !baseDatosOk) {
     return {
       streams: [
         {
           name: 'Kraken',
-          title: 'Activa Peerflix/Torrentio/TorrentClaw, Palantir (moria) o API debrid',
+          title: 'Activa Peerflix/Torrentio/TorrentClaw, base de datos o API debrid',
           externalUrl: 'https://real-debrid.com/apitoken',
         },
       ],
@@ -211,13 +215,13 @@ async function boot() {
     const { ensureMoriaDb } = require('./lib/palantir/moriaEnsure')
     const r = await ensureMoriaDb()
     if (r.ok) {
-      console.log(`[palantir] moria listo (${r.source}): ${r.dbPath}`)
+      console.log(`[moria] listo (${r.source}): ${r.dbPath}`)
       if (!process.env.PALANTIR_MORIA_DB) process.env.PALANTIR_MORIA_DB = r.dbPath
     } else if (process.env.FLY_APP_NAME) {
-      console.warn('[palantir]', r.message)
+      console.warn('[moria]', r.message)
     }
   } catch (e) {
-    console.warn('[palantir] ensureMoriaDb:', e.message)
+    console.warn('[moria] ensureMoriaDb:', e.message)
   }
 
   return startKrakenServer(builder.getInterface(), {

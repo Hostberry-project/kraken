@@ -7,8 +7,8 @@
     "start": "node addon.js",
     "test": "node scripts/test-stream.js",
     "test:series": "node scripts/test-stream.js series tt0944947:1:1",
-    "test:palantir": "node scripts/test-palantir.js",
-    "test:palantir:catalog": "node scripts/test-palantir-catalog.js",
+    "test:moria": "node scripts/test-palantir.js",
+    "test:moria:catalog": "node scripts/test-palantir-catalog.js",
     "moria:extract": "node scripts/moria-extract.js"
   },
   "keywords": [
