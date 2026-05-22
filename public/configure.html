@@ -198,8 +198,13 @@
       <label for="debridApiKey">Real-Debrid API</label>
       <input type="password" id="debridApiKey" name="debridApiKey" autocomplete="off" />
 
-      <label for="alldebridApiKey">AllDebrid API (opcional)</label>
+      <label for="alldebridApiKey">AllDebrid API (recomendado para base de datos / 1fichier)</label>
       <input type="password" id="alldebridApiKey" name="alldebridApiKey" autocomplete="off" />
+
+      <div class="check-line">
+        <input type="checkbox" id="enableBaseDatos" checked />
+        <label for="enableBaseDatos">Incluir base de datos (moria online)</label>
+      </div>
 
       <label for="proxyUrl">Proxy (opcional)</label>
       <input type="text" id="proxyUrl" name="proxyUrl" placeholder="socks5://127.0.0.1:1080" />
@@ -292,6 +297,9 @@
         enablePeerflix: document.getElementById('enablePeerflix').value,
         enableTorrentio: document.getElementById('enableTorrentio').value,
         enableTorrentClaw: document.getElementById('enableTorrentClaw').value,
+        enableBaseDatos: document.getElementById('enableBaseDatos').checked
+          ? 'checked'
+          : 'false',
       }
     }
 
@@ -311,6 +319,8 @@
       if (cfg.alldebridApiKey) document.getElementById('alldebridApiKey').value = cfg.alldebridApiKey
       if (cfg.proxyUrl) document.getElementById('proxyUrl').value = cfg.proxyUrl
       document.getElementById('soloEspanol').checked = cfg.soloEspanol !== 'false'
+      document.getElementById('enableBaseDatos').checked =
+        cfg.enableBaseDatos !== 'false' && cfg.enablePalantir !== 'false'
 
       const siteSet = new Set(
         (cfg.enabledSites || options.defaultEnabledSites || '')
