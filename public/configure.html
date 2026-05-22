@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kraken — Configurar</title>
+  <style>
+    :root {
+      --bg: #1a1a2e;
+      --panel: #252538;
+      --tile: #2d2d44;
+      --tile-off: #3a3a52;
+      --accent: #7c5cff;
+      --accent-site: #2ecc71;
+      --text: #eee;
+      --muted: #9a9ab0;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 1.5rem 1rem 2rem;
+      max-width: 960px;
+      margin-inline: auto;
+    }
+    h1 { font-size: 1.75rem; margin: 0 0 0.2rem; font-weight: 600; }
+    .version { color: var(--muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
+    section {
+      background: var(--panel);
+      border-radius: 10px;
+      padding: 1.25rem 1.35rem 1.35rem;
+      margin-bottom: 1.25rem;
+    }
+    section h2 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin: 0 0 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #3d3d55;
+    }
+    .toolbar {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+    .toolbar button {
+      background: var(--tile);
+      border: 1px solid #4a4a65;
+      color: var(--text);
+      padding: 0.4rem 1rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+    .toolbar button:hover { border-color: var(--accent); }
+    /* Cuadrícula estilo Torrentio: un botón por proveedor */
+    .provider-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
+      gap: 10px;
+    }
+    .provider-btn {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 72px;
+      padding: 0.65rem 0.5rem;
+      border: 2px solid var(--tile-off);
+      border-radius: 8px;
+      background: var(--tile);
+      color: var(--muted);
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: border-color 0.12s, background 0.12s, color 0.12s;
+      text-align: center;
+      line-height: 1.25;
+    }
+    .provider-btn:hover {
+      border-color: #5a5a78;
+      color: var(--text);
+    }
+    .provider-btn.on {
+      color: #fff;
+      border-color: var(--accent);
+      background: #3d3268;
+    }
+    .provider-btn.on.site {
+      border-color: var(--accent-site);
+      background: #1e4d38;
+    }
+    .provider-btn .mark {
+      position: absolute;
+      top: 6px;
+      right: 8px;
+      font-size: 0.75rem;
+      opacity: 0;
+      color: #fff;
+    }
+    .provider-btn.on .mark { opacity: 1; }
+    .provider-btn .label { pointer-events: none; }
+    .provider-btn .sub {
+      font-size: 0.7rem;
+      font-weight: 400;
+      color: var(--muted);
+      margin-top: 0.2rem;
+      pointer-events: none;
+    }
+    .provider-btn.on .sub { color: rgba(255,255,255,0.75); }
+    .fields label {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin: 0.75rem 0 0.35rem;
+    }
+    .fields label:first-child { margin-top: 0; }
+    .fields input[type="text"],
+    .fields input[type="password"] {
+      width: 100%;
+      padding: 0.6rem 0.75rem;
+      border-radius: 6px;
+      border: 1px solid #4a4a65;
+      background: var(--tile);
+      color: var(--text);
+      font-size: 0.95rem;
+    }
+    .check-line {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.85rem;
+      font-size: 0.9rem;
+    }
+    .check-line input { width: auto; }
+    .hint {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin: 0.75rem 0 0;
+    }
+    .install-row {
+      margin-top: 1.25rem;
+      text-align: center;
+    }
+    #status {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 0.75rem;
+      text-align: center;
+    }
+    .install {
+      display: inline-block;
+      min-width: 220px;
+      padding: 0.9rem 2.5rem;
+      font-size: 1.05rem;
+      font-weight: 700;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      letter-spacing: 0.02em;
+    }
+    .install:hover { filter: brightness(1.1); }
+  </style>
+</head>
+<body>
+  <h1>Kraken</h1>
+  <p class="version">Configuración — un botón por fuente (estilo Torrentio)</p>
+
+  <form id="mainForm">
+    <section>
+      <h2>Complementos</h2>
+      <div class="toolbar">
+        <button type="button" data-action="addons-all">Seleccionar todos</button>
+        <button type="button" data-action="addons-none">Quitar todos</button>
+      </div>
+      <div class="provider-grid" id="addons"></div>
+    </section>
+
+    <section>
+      <h2>Indexadores web (España)</h2>
+      <div class="toolbar">
+        <button type="button" data-action="sites-all">Seleccionar todos</button>
+        <button type="button" data-action="sites-none">Quitar todos</button>
+      </div>
+      <div class="provider-grid" id="sites"></div>
+      <p class="hint">Cada botón activa o desactiva esa web. Para reproducir suele hacer falta Real-Debrid abajo.</p>
+    </section>
+
+    <section class="fields">
+      <h2>Debrid y opciones</h2>
+      <label for="debridApiKey">Real-Debrid API</label>
+      <input type="password" id="debridApiKey" name="debridApiKey" autocomplete="off" />
+
+      <label for="alldebridApiKey">AllDebrid API (opcional)</label>
+      <input type="password" id="alldebridApiKey" name="alldebridApiKey" autocomplete="off" />
+
+      <label for="proxyUrl">Proxy (opcional)</label>
+      <input type="text" id="proxyUrl" name="proxyUrl" placeholder="socks5://127.0.0.1:1080" />
+
+      <div class="check-line">
+        <input type="checkbox" id="soloEspanol" name="soloEspanol" checked />
+        <label for="soloEspanol">Solo español / castellano / latino</label>
+      </div>
+    </section>
+
+    <input type="hidden" id="enabledSites" name="enabledSites" />
+    <input type="hidden" id="enablePeerflix" name="enablePeerflix" />
+    <input type="hidden" id="enableTorrentio" name="enableTorrentio" />
+    <input type="hidden" id="enableTorrentClaw" name="enableTorrentClaw" />
+
+    <p id="status"></p>
+    <div class="install-row">
+      <a class="install" id="installLink" href="#">INSTALL</a>
+    </div>
+  </form>
+
+  <script>
+    const ADDON_KEYS = {
+      peerflix: 'enablePeerflix',
+      torrentio: 'enableTorrentio',
+      torrentclaw: 'enableTorrentClaw',
+    }
+
+    let options = { addons: [], sites: [], defaultEnabledSites: '' }
+
+    function parseConfigFromUrl() {
+      try {
+        const path = decodeURIComponent(window.location.pathname || '')
+        const m = path.match(/\/([^/]+)\/manifest\.json/i)
+        if (m) return JSON.parse(m[1])
+      } catch (_) {}
+      return {}
+    }
+
+    function providerBtn(label, group, id, active, subtitle) {
+      const el = document.createElement('button')
+      el.type = 'button'
+      el.className =
+        'provider-btn' + (group === 'site' ? ' site' : '') + (active ? ' on' : '')
+      el.dataset.group = group
+      el.dataset.id = id
+      el.innerHTML =
+        '<span class="mark">✓</span>' +
+        '<span class="label">' +
+        label +
+        '</span>' +
+        (subtitle ? '<span class="sub">' + subtitle + '</span>' : '')
+      el.addEventListener('click', () => {
+        el.classList.toggle('on')
+        syncHidden()
+        updateInstallLink()
+      })
+      return el
+    }
+
+    function setGroupOn(group, on) {
+      document.querySelectorAll('.provider-btn[data-group="' + group + '"]').forEach((el) => {
+        el.classList.toggle('on', on)
+      })
+    }
+
+    function syncHidden() {
+      const sites = []
+      document.querySelectorAll('.provider-btn[data-group="site"].on').forEach((el) => {
+        sites.push(el.dataset.id)
+      })
+      document.getElementById('enabledSites').value = sites.join(',')
+
+      for (const [id, key] of Object.entries(ADDON_KEYS)) {
+        const on = document
+          .querySelector('.provider-btn[data-group="addon"][data-id="' + id + '"]')
+          ?.classList.contains('on')
+        document.getElementById(key).value = on ? 'checked' : 'false'
+      }
+    }
+
+    function buildConfig() {
+      syncHidden()
+      return {
+        debridApiKey: document.getElementById('debridApiKey').value.trim(),
+        alldebridApiKey: document.getElementById('alldebridApiKey').value.trim(),
+        proxyUrl: document.getElementById('proxyUrl').value.trim(),
+        soloEspanol: document.getElementById('soloEspanol').checked ? 'checked' : 'false',
+        enabledSites: document.getElementById('enabledSites').value,
+        enablePeerflix: document.getElementById('enablePeerflix').value,
+        enableTorrentio: document.getElementById('enableTorrentio').value,
+        enableTorrentClaw: document.getElementById('enableTorrentClaw').value,
+      }
+    }
+
+    function updateInstallLink() {
+      const cfg = buildConfig()
+      const host = window.location.host
+      document.getElementById('installLink').href =
+        'stremio://' + host + '/' + encodeURIComponent(JSON.stringify(cfg)) + '/manifest.json'
+      const nAddon = document.querySelectorAll('.provider-btn[data-group="addon"].on').length
+      const nSite = document.querySelectorAll('.provider-btn[data-group="site"].on').length
+      document.getElementById('status').textContent =
+        nAddon + ' complemento(s) · ' + nSite + ' web(s) activas'
+    }
+
+    function applyConfig(cfg) {
+      if (cfg.debridApiKey) document.getElementById('debridApiKey').value = cfg.debridApiKey
+      if (cfg.alldebridApiKey) document.getElementById('alldebridApiKey').value = cfg.alldebridApiKey
+      if (cfg.proxyUrl) document.getElementById('proxyUrl').value = cfg.proxyUrl
+      document.getElementById('soloEspanol').checked = cfg.soloEspanol !== 'false'
+
+      const siteSet = new Set(
+        (cfg.enabledSites || options.defaultEnabledSites || '')
+          .split(',')
+          .map((s) => s.trim())
+          .filter(Boolean)
+      )
+      document.querySelectorAll('.provider-btn[data-group="site"]').forEach((el) => {
+        el.classList.toggle('on', siteSet.has(el.dataset.id))
+      })
+
+      document.querySelectorAll('.provider-btn[data-group="addon"]').forEach((el) => {
+        const key = ADDON_KEYS[el.dataset.id]
+        const on = cfg[key] !== 'false' && cfg[key] !== false
+        el.classList.toggle('on', on)
+      })
+      syncHidden()
+      updateInstallLink()
+    }
+
+    async function init() {
+      const res = await fetch('/api/configure-options.json')
+      options = await res.json()
+
+      const addonsEl = document.getElementById('addons')
+      const addonSub = { peerflix: 'Prioridad', torrentio: 'Agregador', torrentclaw: 'Agregador' }
+      options.addons.forEach((a) => {
+        addonsEl.appendChild(
+          providerBtn(a.name, 'addon', a.id, a.defaultOn, addonSub[a.id] || '')
+        )
+      })
+
+      const sitesEl = document.getElementById('sites')
+      options.sites.forEach((s) => {
+        let host = ''
+        try {
+          host = new URL(s.baseUrl).hostname.replace(/^www\./, '')
+        } catch (_) {}
+        sitesEl.appendChild(providerBtn(s.name, 'site', s.name, s.defaultOn, host))
+      })
+
+      document.querySelector('[data-action="addons-all"]').onclick = () => {
+        setGroupOn('addon', true)
+        syncHidden()
+        updateInstallLink()
+      }
+      document.querySelector('[data-action="addons-none"]').onclick = () => {
+        setGroupOn('addon', false)
+        syncHidden()
+        updateInstallLink()
+      }
+      document.querySelector('[data-action="sites-all"]').onclick = () => {
+        setGroupOn('site', true)
+        syncHidden()
+        updateInstallLink()
+      }
+      document.querySelector('[data-action="sites-none"]').onclick = () => {
+        setGroupOn('site', false)
+        syncHidden()
+        updateInstallLink()
+      }
+
+      document.getElementById('mainForm').addEventListener('change', updateInstallLink)
+      document.getElementById('mainForm').addEventListener('input', updateInstallLink)
+
+      document.getElementById('installLink').addEventListener('click', (e) => {
+        const nAddon = document.querySelectorAll('.provider-btn[data-group="addon"].on').length
+        const nSite = document.querySelectorAll('.provider-btn[data-group="site"].on').length
+        if (!nAddon && !nSite) {
+          e.preventDefault()
+          alert('Activa al menos un complemento o una web.')
+        }
+      })
+
+      applyConfig(parseConfigFromUrl())
+      if (!document.querySelector('.provider-btn[data-group="site"].on')) {
+        setGroupOn('site', true)
+        syncHidden()
+        updateInstallLink()
+      }
+    }
+
+    init().catch((err) => {
+      document.getElementById('status').textContent = 'Error: ' + err.message
+    })
+  </script>
+</body>
+</html>

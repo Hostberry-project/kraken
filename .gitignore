@@ -1,0 +1,30 @@
+# Dependencias (regenerar con npm install)
+node_modules/
+
+# Secretos y entorno local
+.env
+.env.*
+!.env.example
+
+# Logs y caché
+*.log
+npm-debug.log*
+.cache/
+
+# Moria — copias locales / extraídas (no subir)
+moria.db
+moria_extracted.db
+*.cm3
+*.zm3
+!moria_3_3_9.zm3
+
+# Fly.io CLI local
+.fly/
+
+# Sistema / editores
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*~

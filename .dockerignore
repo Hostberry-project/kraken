@@ -1,0 +1,14 @@
+node_modules
+.git
+.github
+.fly
+.env
+.env.*
+*.log
+.DS_Store
+Thumbs.db
+.idea
+.vscode
+scripts/*
+!scripts/moria-extract.js
+!moria_3_3_9.zm3
