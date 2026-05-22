@@ -52,6 +52,25 @@ Sin subida manual, al arrancar puede descargarse el `.zm3` público (`PALANTIR_M
 
 En Stremio: activa **Incluir Palantir** y **AllDebrid** (enlaces 1fichier).
 
+## GitHub (sincronizar repo)
+
+```bash
+cd c:\Users\pc\Desktop\stremio
+gh auth login
+gh repo create kraken-stremio --public --source=. --remote=origin --push
+```
+
+Sin `gh`: crea un repo vacío en GitHub y luego:
+
+```bash
+git remote add origin https://github.com/TU_USUARIO/kraken-stremio.git
+git push -u origin main
+```
+
+**Sincronización con Fly:** en el repo de GitHub → *Settings → Secrets → Actions* → `FLY_API_TOKEN` (`fly tokens create deploy`). Cada `push` a `main` despliega con `.github/workflows/fly-deploy.yml`.
+
+El archivo `moria_3_3_9.zm3` (~53 MB) va en el repo; Fly lo usa desde la imagen (`PALANTIR_MORIA_ZM3=/app/moria_3_3_9.zm3`).
+
 ## Fly.io
 
 ```bash
@@ -60,7 +79,7 @@ fly launch
 fly deploy
 ```
 
-Secret `FLY_API_TOKEN` para GitHub Actions. Comprueba: `curl https://TU-APP.fly.dev/health.json`
+Comprueba: `curl https://TU-APP.fly.dev/health.json`
 
 ## Estructura
 
