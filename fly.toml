@@ -1,5 +1,9 @@
-# Nombre de la app en Fly (debe coincidir con fly apps list).
-app = 'kraken-9tyojw'
+# fly.toml app configuration file generated for kraken-stremio on 2026-05-22T20:26:36Z
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'kraken-stremio'
 primary_region = 'ams'
 
 [build]
@@ -7,13 +11,13 @@ primary_region = 'ams'
 
 [env]
   NODE_ENV = 'production'
-  PORT = '8080'
-  PUBLIC_URL = 'https://kraken-9tyojw.fly.dev'
   PALANTIR_MORIA_DB = '/data/moria.db'
   PALANTIR_MORIA_ZM3 = '/app/moria_3_3_9.zm3'
   PALANTIR_MORIA_ZM3_URL = 'https://github.com/Hostberry-project/kraken/raw/refs/heads/main/moria_3_3_9.zm3'
+  PORT = '8080'
+  PUBLIC_URL = 'https://kraken-9tyojw.fly.dev'
 
-[mounts]
+[[mounts]]
   source = 'moria_data'
   destination = '/data'
 
@@ -26,13 +30,14 @@ primary_region = 'ams'
   processes = ['app']
 
   [[http_service.checks]]
-    grace_period = '60s'
     interval = '30s'
+    timeout = '10s'
+    grace_period = '1m0s'
     method = 'GET'
     path = '/health.json'
-    timeout = '10s'
 
 [[vm]]
   memory = '1gb'
   cpu_kind = 'shared'
   cpus = 1
+  memory_mb = 1024
