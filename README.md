@@ -4,11 +4,14 @@ Agregador en español en la nube: **Peerflix**, **Torrentio**, **TorrentClaw**, 
 
 ## Instalar en Stremio
 
-**Ajustes → Complementos → Pegar URL:**
+**Ajustes → Complementos → Pegar URL (la que esté desplegada):**
 
-```
-https://kraken-9tyojw.fly.dev/manifest.json
-```
+| App Fly | URL manifest |
+|---------|----------------|
+| **kraken-9tyojw** (activa) | `https://kraken-9tyojw.fly.dev/manifest.json` |
+| kraken-project | `https://kraken-project.fly.dev/manifest.json` (solo si responde) |
+
+Usa **kraken-9tyojw** salvo que hayas desplegado y probado `kraken-project`.
 
 **Configurar** (`/configure`): activa **Incluir base de datos**, upstreams si quieres, y **AllDebrid** o **Real-Debrid** (enlaces 1fichier).
 
