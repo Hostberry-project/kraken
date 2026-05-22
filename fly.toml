@@ -1,6 +1,6 @@
 # Nombre de la app en Fly (debe coincidir con fly apps list).
-app = 'kraken-anqfxw'
-primary_region = 'mad'
+app = 'kraken-9tyojw'
+primary_region = 'ams'
 
 [build]
   dockerfile = 'Dockerfile'
@@ -26,7 +26,7 @@ primary_region = 'mad'
   processes = ['app']
 
   [[http_service.checks]]
-    grace_period = '120s'
+    grace_period = '60s'
     interval = '30s'
     method = 'GET'
     path = '/health.json'
