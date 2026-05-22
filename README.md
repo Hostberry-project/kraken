@@ -57,15 +57,10 @@ En Stremio: activa **Incluir Palantir** y **AllDebrid** (enlaces 1fichier).
 ```bash
 cd c:\Users\pc\Desktop\stremio
 gh auth login
-gh repo create kraken-stremio --public --source=. --remote=origin --push
+git push origin main
 ```
 
-Sin `gh`: crea un repo vacío en GitHub y luego:
-
-```bash
-git remote add origin https://github.com/TU_USUARIO/kraken-stremio.git
-git push -u origin main
-```
+Repo: [Hostberry-project/kraken](https://github.com/Hostberry-project/kraken)
 
 **Sincronización con Fly:** en el repo de GitHub → *Settings → Secrets → Actions* → `FLY_API_TOKEN` (`fly tokens create deploy`). Cada `push` a `main` despliega con `.github/workflows/fly-deploy.yml`.
 
