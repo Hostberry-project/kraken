@@ -212,11 +212,15 @@ if (!fs.existsSync(publicDir)) {
 
 async function boot() {
   try {
-    const { ensureMoriaDb } = require('./lib/palantir/moriaEnsure')
-    const r = await ensureMoriaDb()
+    const { ensureMoriaDbOnce } = require('./lib/palantir/moriaEnsure')
+    let r = await ensureMoriaDbOnce()
+    if (!r.ok && process.env.FLY_APP_NAME) {
+      console.warn('[moria] Reintento en 5s...')
+      await new Promise((resolve) => setTimeout(resolve, 5000))
+      r = await ensureMoriaDbOnce()
+    }
     if (r.ok) {
       console.log(`[moria] listo (${r.source}): ${r.dbPath}`)
-      if (!process.env.PALANTIR_MORIA_DB) process.env.PALANTIR_MORIA_DB = r.dbPath
     } else if (process.env.FLY_APP_NAME) {
       console.warn('[moria]', r.message)
     }

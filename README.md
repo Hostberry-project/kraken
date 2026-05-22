@@ -26,6 +26,12 @@ Usa **kraken-stremio** salvo que hayas desplegado y probado `kraken-project`.
 curl -s https://kraken-stremio.fly.dev/health.json
 ```
 
+Debe mostrar `"ready": true` y `"sizeMb"` ~160. Si `ready: false`, abre la URL otra vez (prepara moria) o crea el volumen:
+
+```bash
+fly volume create moria_data -a kraken-stremio -r ams -n 1 --size 3
+```
+
 ## Fly.io — volumen moria (una vez)
 
 Si el deploy falla con *needs volumes moria_data*, crea el volumen en **ams** (misma región que `primary_region` en `fly.toml`):
