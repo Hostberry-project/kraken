@@ -14,6 +14,9 @@ npm-debug.log*
 # Moria — copias locales / extraídas (no subir)
 moria.db
 moria_extracted.db
+moria_test_quick.db
+test_moria.zip
+**/__kraken.zip
 *.cm3
 *.zm3
 !moria_3_3_9.zm3

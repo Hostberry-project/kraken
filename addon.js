@@ -20,6 +20,7 @@ const config = require('./config')
 const { buildStreams } = require('./lib/streams')
 const { getDebridServices, hasAnyDebrid } = require('./lib/debrid')
 const { hasEnabledUpstream, parseUserConfig } = require('./lib/userConfig')
+const { normalizeUserConfig } = require('./lib/userConfigNormalize')
 const { isStreamId } = require('./lib/ids')
 const {
   handlePalantirCatalog,
@@ -41,14 +42,14 @@ const builder = new addonBuilder({
     {
       type: 'movie',
       id: 'bd-pelis',
-      name: 'Base de datos',
+      name: 'Base de datos — Películas',
       extraSupported: ['search', 'skip'],
       extraRequired: [],
     },
     {
       type: 'series',
       id: 'bd-series',
-      name: 'Base de datos',
+      name: 'Base de datos — Series',
       extraSupported: ['search', 'skip'],
       extraRequired: [],
     },
@@ -122,12 +123,12 @@ const builder = new addonBuilder({
 })
 
 builder.defineCatalogHandler(async function (args) {
-  const result = await handlePalantirCatalog(args)
-  return result
+  return handlePalantirCatalog(args)
 })
 
 builder.defineMetaHandler(async function (args) {
-  const { type, id, config: userConfig = {} } = args
+  const { type, id } = args
+  const userConfig = normalizeUserConfig(args.config)
   if (isBaseDatosDisabled(userConfig)) return { meta: null }
   if (!/^tmdb:\d+/i.test(String(id))) return { meta: null }
   const tmdbId = Number(String(id).split(':')[1])
@@ -136,7 +137,8 @@ builder.defineMetaHandler(async function (args) {
 })
 
 builder.defineStreamHandler(async function (args) {
-  const { type, id, config: userConfig } = args
+  const { type, id } = args
+  const cfg = normalizeUserConfig(args.config)
 
   if (!id || !isStreamId(id)) {
     return { streams: [] }
@@ -145,8 +147,6 @@ builder.defineStreamHandler(async function (args) {
   if (type !== 'movie' && type !== 'series') {
     return { streams: [] }
   }
-
-  const cfg = userConfig || {}
   const userOpts = parseUserConfig(cfg)
   const services = getDebridServices(cfg)
   const baseDatosOk = isPalantirConfigured(cfg) && userOpts.enableBaseDatos
